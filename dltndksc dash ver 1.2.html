@@ -1,0 +1,748 @@
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLTNDKS 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #074CA1;
+    --blue-pale: #EBF1FA;
+    --blue-row: rgba(7,76,161,0.08);
+    --bg: #F8F8F6;
+    --bg-card: #FFFFFF;
+    --bg-hover: #F0F4FF;
+    --border: rgba(0,0,0,0.12);
+    --border-blue: rgba(7,76,161,0.25);
+    --ink: #111111;
+    --ink-mid: #444444;
+    --ink-sub: #777777;
+    --ink-muted: #AAAAAA;
+    --red: #C0392B;
+    --green: #1D6F42;
+    --gold: #C9A84C;
+    --gold-bg: rgba(201,168,76,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background-color: var(--bg);
+    background-image: repeating-linear-gradient(
+      to right, transparent, transparent 28px,
+      rgba(7,76,161,0.025) 28px, rgba(7,76,161,0.025) 29px
+    );
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    background: var(--blue);
+    padding: 5px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  #topbar-clock {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  header {
+    background: rgba(248,248,246,0.96);
+    border-bottom: 2px solid var(--blue);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo { display:flex; align-items:baseline; }
+  .logo-sl { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; font-style:italic; letter-spacing:3px; color:var(--blue); }
+  .logo-rest { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; font-style:italic; letter-spacing:3px; color:var(--ink); }
+  .header-date { font-size:11px; color:var(--ink-sub); letter-spacing:1px; }
+
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card { background:var(--bg-card); border:1px solid var(--border); }
+  .card-title {
+    font-family:'Bebas Neue', sans-serif;
+    font-size:14px;
+    letter-spacing:3px;
+    color:var(--ink-sub);
+    padding:10px 16px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .card-title .sub { font-family:'Noto Sans KR',sans-serif; font-size:10px; letter-spacing:1px; color:var(--ink-muted); }
+
+  /* STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+  .stat-box { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .stat-box:last-child { border-right: none; }
+  .stat-label { font-size:9px; letter-spacing:3px; color:var(--ink-muted); font-weight:700; margin-bottom:6px; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--blue); line-height:1; }
+  .stat-num.red { color: var(--red); }
+  .stat-sub { font-size:10px; color:var(--ink-sub); margin-top:3px; }
+
+  /* D-DAY */
+  .dday-strip { display: flex; overflow-x: auto; }
+  .dday-strip::-webkit-scrollbar { height:3px; }
+  .dday-strip::-webkit-scrollbar-thumb { background:var(--border-blue); }
+
+  .dday-item {
+    flex: 0 0 auto;
+    min-width: 130px;
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .dday-item::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--blue); }
+  .dday-item.urgent::before { background: var(--red); }
+  .dday-item.gold-item::before { background: var(--gold); }
+
+  .dday-name { font-size:10px; color:var(--ink-sub); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
+  .dday-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--blue); line-height:1; }
+  .dday-num.red { color:var(--red); }
+  .dday-num.gold { color:var(--gold); }
+  .dday-num.muted { color:var(--ink-muted); }
+  .dday-date { font-size:9px; color:var(--ink-muted); margin-top:2px; letter-spacing:1px; }
+  .dday-empty { padding:16px; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
+
+  /* LAYOUT */
+  .row3 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+  /* TASK INPUT */
+  .task-input-row { display:flex; border-bottom:1px solid var(--border); }
+
+  .task-input-row input[type="text"] {
+    flex:1; border:none; border-right:1px solid var(--border);
+    padding:11px 14px; font-family:'Noto Sans KR',sans-serif; font-size:12px;
+    background:transparent; color:var(--ink); outline:none;
+  }
+  .task-input-row input[type="text"]::placeholder { color:var(--ink-muted); }
+
+  .task-input-row input[type="date"] {
+    border:none; border-right:1px solid var(--border);
+    padding:11px 10px; font-size:11px; background:transparent;
+    color:var(--ink-mid); outline:none; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  }
+
+  .task-input-row select {
+    border:none; border-right:1px solid var(--border);
+    padding:11px 8px; font-size:11px; background:transparent;
+    color:var(--ink-mid); outline:none; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  }
+
+  .btn-add {
+    background:var(--blue); border:none; color:white;
+    padding:11px 20px; font-family:'Bebas Neue',sans-serif;
+    font-size:14px; letter-spacing:2px; cursor:pointer;
+    transition:opacity 0.2s; white-space:nowrap;
+  }
+  .btn-add:hover { opacity:0.85; }
+
+  /* TASK LIST */
+  .task-list { max-height:320px; overflow-y:auto; }
+  .task-list::-webkit-scrollbar { width:3px; }
+  .task-list::-webkit-scrollbar-thumb { background:var(--border-blue); }
+
+  .task-item {
+    display:flex; align-items:center; gap:10px;
+    padding:10px 16px; border-bottom:1px solid var(--border);
+    transition:background 0.15s;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+  .task-item:hover { background:var(--bg-hover); }
+  .task-item:last-child { border-bottom:none; }
+
+  .task-check {
+    width:15px; height:15px; border:1.5px solid var(--border-blue);
+    cursor:pointer; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s;
+  }
+  .task-check.checked { background:var(--blue); border-color:var(--blue); }
+  .task-check.checked::after { content:'✓'; color:white; font-size:9px; font-weight:bold; }
+
+  .task-text { flex:1; font-size:12px; color:var(--ink); }
+  .task-text.done { color:var(--ink-muted); text-decoration:line-through; }
+
+  .tag { font-size:9px; letter-spacing:1px; padding:2px 7px; font-weight:700; }
+  .tag-assignment { background:var(--blue-pale); color:var(--blue); }
+  .tag-exam { background:rgba(192,57,43,0.1); color:var(--red); }
+  .tag-personal { background:var(--gold-bg); color:var(--gold); }
+  .tag-class { background:rgba(29,111,66,0.1); color:var(--green); }
+
+  .task-dday { font-family:'Bebas Neue',sans-serif; font-size:14px; color:var(--ink-muted); letter-spacing:1px; min-width:40px; text-align:right; }
+  .task-dday.red { color:var(--red); }
+  .task-dday.gold { color:var(--gold); }
+
+  .btn-del { background:none; border:none; color:var(--ink-muted); cursor:pointer; font-size:12px; padding:2px 4px; transition:color 0.15s; }
+  .btn-del:hover { color:var(--red); }
+
+  .empty-state { padding:32px 16px; text-align:center; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
+
+  /* TIMETABLE */
+  .timetable-wrap { overflow-x:auto; }
+  table.tt { width:100%; border-collapse:collapse; font-size:11px; table-layout:fixed; }
+  table.tt th {
+    font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:1px;
+    color:var(--ink-sub); padding:8px 2px; border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border); text-align:center; font-weight:400;
+    width:calc((100% - 52px) / 5);
+  }
+  table.tt th:last-child { border-right:none; }
+  table.tt th.today-th { color:var(--blue); background:var(--blue-pale); }
+  table.tt td {
+    padding:5px 3px; border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border); text-align:center;
+    color:var(--ink-muted); font-size:10px;
+  }
+  table.tt td:last-child { border-right:none; }
+  table.tt td.time-col { color:rgba(7,76,161,0.45); font-size:9px; letter-spacing:1px; width:52px; }
+  table.tt td.today-col { background:var(--blue-row); }
+  .class-cell { background:var(--blue); color:white; padding:5px 3px; font-size:10px; border-radius:1px; line-height:1.5; }
+  .class-room { display:block; font-size:8px; color:rgba(255,255,255,0.7); margin-top:1px; }
+
+  /* MEMO */
+  .memo-area {
+    width:100%; height:230px; border:none; padding:14px 16px;
+    font-family:'Noto Sans KR',sans-serif; font-size:12px;
+    color:var(--ink); background:transparent; resize:none; outline:none; line-height:1.8;
+  }
+  .memo-footer { display:flex; justify-content:space-between; align-items:center; padding:8px 16px; border-top:1px solid var(--border); }
+  .memo-saved { font-size:10px; color:var(--green); letter-spacing:1px; }
+  .btn-save {
+    background:none; border:1px solid var(--border-blue); color:var(--blue);
+    padding:5px 16px; font-family:'Bebas Neue',sans-serif; font-size:12px;
+    letter-spacing:2px; cursor:pointer; transition:background 0.15s;
+  }
+  .btn-save:hover { background:var(--blue-pale); }
+
+  /* 알림 버튼 */
+  .btn-notify {
+    background:none; border:1px solid var(--border-blue); color:var(--blue);
+    padding:4px 12px; font-family:'Bebas Neue',sans-serif; font-size:12px;
+    letter-spacing:2px; cursor:pointer; transition:background 0.15s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .btn-notify:hover { background:var(--blue-pale); }
+  .btn-notify.active { background:var(--blue); color:white; border-color:var(--blue); }
+  .notify-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
+  .notify-dot.off { background:var(--ink-muted); }
+
+  /* QUICK LINKS */
+  .qlink {
+    display:block; border:1px solid var(--border); padding:12px 16px;
+    margin-bottom:10px; text-decoration:none; transition:background 0.15s;
+  }
+  .qlink:last-child { margin-bottom:0; }
+  .qlink:hover { background:var(--bg-hover); }
+  .qlink-label { font-size:9px; letter-spacing:3px; color:var(--ink-muted); margin-bottom:4px; }
+  .qlink-name { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--blue); }
+
+  footer {
+    background:var(--bg-card); border-top:1px solid var(--border);
+    padding:14px 32px; display:flex; justify-content:space-between;
+    align-items:center; font-size:10px; letter-spacing:1px; color:var(--ink-muted);
+  }
+
+  @media(max-width:768px){
+    .row3{ grid-template-columns:1fr; }
+    .stats-row{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span>2026학년도 1학기</span>
+  <span id="topbar-clock">00:00:00</span>
+</div>
+
+<header>
+  <div class="logo">
+    <span class="logo-sl">DLTNDKSC</span>
+    <span class="logo-rest">&nbsp;DASHBOARD</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="btn-notify" id="notify-btn" onclick="toggleNotify()">
+      <span class="notify-dot off" id="notify-dot"></span>
+      <span id="notify-label">알림 OFF</span>
+    </button>
+    <div class="header-date" id="header-date"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-label">TOTAL TASKS</div>
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-sub">전체 할 일</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">COMPLETED</div>
+      <div class="stat-num" id="stat-done">0</div>
+      <div class="stat-sub">완료</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">URGENT</div>
+      <div class="stat-num red" id="stat-urgent">0</div>
+      <div class="stat-sub">3일 이내 마감</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">NEXT DEADLINE</div>
+      <div class="stat-num" id="stat-next">—</div>
+      <div class="stat-sub">다음 마감까지</div>
+    </div>
+  </div>
+
+  <!-- D-DAY -->
+  <div class="card">
+    <div class="card-title">D-DAY <span class="sub">마감 임박 순</span></div>
+    <div class="dday-strip" id="dday-strip">
+      <div class="dday-empty">마감일이 있는 항목을 추가하면 여기에 표시돼요</div>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div class="card">
+    <div class="card-title">TASKS &amp; ASSIGNMENTS <span class="sub">과제 · 시험 · 일정</span></div>
+    <div class="task-input-row">
+      <input type="text" id="task-input" placeholder="과제명 또는 일정 입력">
+      <input type="date" id="task-date">
+      <select id="task-tag">
+        <option value="assignment">과제</option>
+        <option value="exam">시험</option>
+        <option value="class">수업</option>
+        <option value="personal">개인</option>
+      </select>
+      <button class="btn-add" onclick="addTask()">+ ADD</button>
+    </div>
+    <div class="task-list" id="task-list">
+      <div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>
+    </div>
+  </div>
+
+  <!-- TIMETABLE + 모듈 2분할 -->
+  <div class="row3">
+
+    <!-- 시간표 이미지/PDF 업로드 -->
+    <div class="card">
+      <div class="card-title">TIMETABLE <span class="sub" id="today-label"></span></div>
+      <div id="tt-upload-area" style="padding:20px;text-align:center;border-bottom:1px solid var(--border);">
+        <label for="tt-file" style="cursor:pointer;display:block;">
+          <div style="border:2px dashed var(--border-blue);padding:28px 16px;transition:background 0.15s;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--blue);margin-bottom:6px;">📎 파일 업로드</div>
+            <div style="font-size:11px;color:var(--ink-muted);">이미지(JPG·PNG) 또는 PDF · 클릭하거나 드래그</div>
+          </div>
+        </label>
+        <input type="file" id="tt-file" accept="image/*,.pdf" style="display:none;" onchange="handleTTFile(this)">
+      </div>
+      <div id="tt-preview" style="display:none;position:relative;">
+        <button onclick="clearTT()" style="position:absolute;top:8px;right:8px;background:var(--red);border:none;color:white;font-size:11px;padding:4px 10px;cursor:pointer;z-index:1;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">✕ 삭제</button>
+        <img id="tt-img" style="width:100%;display:none;">
+        <iframe id="tt-pdf" style="width:100%;height:420px;border:none;display:none;"></iframe>
+      </div>
+    </div>
+
+    <!-- 모듈 일정 -->
+    <div class="card">
+      <div class="card-title">KNU 전공탐색 I <span class="sub">수요일 2:40-5:20</span></div>
+      <table class="tt" style="width:100%;table-layout:auto;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding-left:14px;width:55px;">모듈</th>
+            <th>선택전공</th>
+            <th>주차</th>
+            <th>수업일자</th>
+            <th>교수</th>
+            <th style="padding-right:14px;">강의실</th>
+          </tr>
+        </thead>
+        <tbody id="module-body"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- MEMO + QUICK LINKS -->
+  <div class="row3">
+    <div class="card">
+      <div class="card-title">MEMO <span class="sub">자유 메모</span></div>
+      <textarea class="memo-area" id="memo" placeholder="자유롭게 메모하세요..."></textarea>
+      <div class="memo-footer">
+        <span class="memo-saved" id="memo-saved"></span>
+        <button class="btn-save" onclick="saveMemo()">SAVE</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">QUICK LINKS <span class="sub">바로가기</span></div>
+      <div style="padding:16px;">
+        <a class="qlink" href="https://ecampus.kangnam.ac.kr" target="_blank">
+          <div class="qlink-label">이러닝 캠퍼스</div>
+          <div class="qlink-name">ECAMPUS →</div>
+        </a>
+        <a class="qlink" href="https://lib.kangnam.ac.kr" target="_blank">
+          <div class="qlink-label">중앙도서관</div>
+          <div class="qlink-name">LIBRARY →</div>
+        </a>
+        <a class="qlink" href="https://knusso.kangnam.ac.kr" target="_blank">
+          <div class="qlink-label">학교 포털</div>
+          <div class="qlink-name">PORTAL →</div>
+        </a>
+        <a class="qlink" href="https://verius.kangnam.ac.kr/main.do" target="_blank">
+          <div class="qlink-label">참인재시스템</div>
+          <div class="qlink-name">VERIUS →</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div style="display:flex;align-items:baseline;gap:2px;">
+    <span style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:700;font-size:14px;letter-spacing:2px;color:var(--blue);">DLTNDKSC</span>
+    <span style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:700;font-size:14px;letter-spacing:2px;"> DASHBOARD</span>
+  </div>
+  <span>2026학년도 1학기</span>
+</footer>
+
+<script>
+  // ══════════════════════════════════════
+  // 📋 전공탐색 모듈 일정
+  // ══════════════════════════════════════
+  const MODULES = [
+    { module:'모듈1', major:'시니어비즈니스학과', weeks:'2주차',  date:'2026.03.11', prof:'이성철', room:'교105' },
+    { module:'모듈1', major:'시니어비즈니스학과', weeks:'3주차',  date:'2026.03.18', prof:'이성철', room:'교105' },
+    { module:'모듈2', major:'국제무역학전공',     weeks:'4주차',  date:'2026.03.25', prof:'박근호', room:'교105' },
+    { module:'모듈2', major:'국제무역학전공',     weeks:'5주차',  date:'2026.04.01', prof:'박근호', room:'교105' },
+    { module:'모듈3', major:'국제지역학과',       weeks:'6주차',  date:'2026.04.08', prof:'조찬수', room:'샬B108' },
+    { module:'모듈3', major:'국제지역학과',       weeks:'7주차',  date:'2026.04.15', prof:'조찬수', room:'샬B108' },
+    { module:'모듈4', major:'건축공학전공',       weeks:'9주차',  date:'2026.04.29', prof:'이성찬', room:'경408-1' },
+    { module:'모듈4', major:'건축공학전공',       weeks:'10주차', date:'2026.05.06', prof:'이성찬', room:'경408-1' },
+    { module:'모듈5', major:'문화콘텐츠학과',     weeks:'11주차', date:'2026.05.13', prof:'정승화', room:'샬B108' },
+    { module:'모듈5', major:'문화콘텐츠학과',     weeks:'12주차', date:'2026.05.20', prof:'안진경', room:'샬B108' },
+  ];
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  // 시계
+  function tick(){
+    const now = new Date();
+    document.getElementById('topbar-clock').textContent =
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const days=['일','월','화','수','목','금','토'];
+    document.getElementById('header-date').textContent =
+      `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${days[now.getDay()]}요일`;
+  }
+  setInterval(tick,1000); tick();
+
+  // 시간표 파일 업로드
+  function handleTTFile(input){
+    const file = input.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const data = e.target.result;
+      document.getElementById('tt-upload-area').style.display = 'none';
+      document.getElementById('tt-preview').style.display = 'block';
+      if(file.type === 'application/pdf'){
+        document.getElementById('tt-pdf').src = data;
+        document.getElementById('tt-pdf').style.display = 'block';
+        document.getElementById('tt-img').style.display = 'none';
+      } else {
+        document.getElementById('tt-img').src = data;
+        document.getElementById('tt-img').style.display = 'block';
+        document.getElementById('tt-pdf').style.display = 'none';
+      }
+      try {
+        localStorage.setItem('knu-tt-file', data);
+        localStorage.setItem('knu-tt-type', file.type);
+      } catch(e) { console.warn('Storage full'); }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearTT(){
+    document.getElementById('tt-upload-area').style.display = 'block';
+    document.getElementById('tt-preview').style.display = 'none';
+    document.getElementById('tt-img').src = '';
+    document.getElementById('tt-pdf').src = '';
+    document.getElementById('tt-file').value = '';
+    localStorage.removeItem('knu-tt-file');
+    localStorage.removeItem('knu-tt-type');
+  }
+
+  function loadTT(){
+    try {
+      const data = localStorage.getItem('knu-tt-file');
+      const type = localStorage.getItem('knu-tt-type');
+      if(!data) return;
+      document.getElementById('tt-upload-area').style.display = 'none';
+      document.getElementById('tt-preview').style.display = 'block';
+      if(type === 'application/pdf'){
+        document.getElementById('tt-pdf').src = data;
+        document.getElementById('tt-pdf').style.display = 'block';
+      } else {
+        document.getElementById('tt-img').src = data;
+        document.getElementById('tt-img').style.display = 'block';
+      }
+    } catch(e) { console.warn('Storage error'); }
+  }
+  loadTT();
+
+  // 모듈 일정
+  function renderModules(){
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())}`;
+    document.getElementById('module-body').innerHTML = MODULES.map(m=>{
+      const isPast = m.date < todayStr;
+      const isToday = m.date === todayStr;
+      const rowStyle = isToday ? 'background:var(--blue-row);' : isPast ? 'opacity:0.4;' : '';
+      const dateColor = isToday ? 'var(--gold)' : isPast ? 'var(--ink-muted)' : 'var(--ink)';
+      return `<tr style="${rowStyle}">
+        <td style="text-align:left;padding-left:14px;font-weight:700;color:var(--blue);">${m.module}</td>
+        <td>${m.major}</td>
+        <td style="color:var(--ink-muted);">${m.weeks}</td>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:${dateColor};">${m.date}${isToday?' ★':''}</td>
+        <td>${m.prof}</td>
+        <td style="padding-right:14px;color:var(--ink-sub);">${m.room}</td>
+      </tr>`;
+    }).join('');
+  }
+  renderModules();
+
+  // ══════════════════════════════════════
+  // ✅ 버그 수정: daysLeft - 날짜 파싱 안전하게
+  // input[type="date"] 는 "2026-04-08" 형식으로 반환
+  // new Date("2026-04-08") 은 Safari 등에서 NaN 반환 → 수정
+  // ══════════════════════════════════════
+  function daysLeft(d){
+    if(!d) return null;
+    const parts = d.split('-');
+    if(parts.length !== 3) return null;
+    const target = new Date(Number(parts[0]), Number(parts[1])-1, Number(parts[2]));
+    if(isNaN(target.getTime())) return null;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    return Math.ceil((target - today) / 86400000);
+  }
+
+  // 할 일
+  let tasks = [];
+  try { tasks = JSON.parse(localStorage.getItem('knu-tasks')||'[]'); } catch(e) {}
+  function save(){ try { localStorage.setItem('knu-tasks',JSON.stringify(tasks)); } catch(e){} }
+
+  function addTask(){
+    const text=document.getElementById('task-input').value.trim();
+    const date=document.getElementById('task-date').value;
+    const tag=document.getElementById('task-tag').value;
+    if(!text) return;
+    tasks.unshift({id:Date.now(),text,date,tag,done:false});
+    document.getElementById('task-input').value='';
+    document.getElementById('task-date').value='';
+    save(); renderAll();
+  }
+  document.getElementById('task-input').addEventListener('keydown',e=>{ if(e.key==='Enter') addTask(); });
+
+  function toggleTask(id){ const t=tasks.find(t=>t.id===id); if(t){t.done=!t.done;save();renderAll();} }
+  function deleteTask(id){ tasks=tasks.filter(t=>t.id!==id); save(); renderAll(); }
+
+  const TAG_LABEL={assignment:'과제',exam:'시험',class:'수업',personal:'개인'};
+  function renderAll(){ renderTasks(); renderStats(); renderDday(); }
+
+  function renderTasks(){
+    const list=document.getElementById('task-list');
+    if(!tasks.length){ list.innerHTML='<div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>'; return; }
+    const sorted=[...tasks].sort((a,b)=>{
+      if(!a.date) return 1; if(!b.date) return -1;
+      return new Date(a.date)-new Date(b.date);
+    });
+    list.innerHTML=sorted.map(t=>{
+      const dl=daysLeft(t.date);
+      let ddayHtml='';
+      if(dl!==null){
+        // ✅ 버그 수정: D-DAY(0) 체크를 dl<=2 보다 먼저
+        const cls=dl<0?'':dl===0?'gold':dl<=2?'red':'';
+        const label=dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
+        ddayHtml=`<span class="task-dday ${cls}">${label}</span>`;
+      }
+      return `<div class="task-item">
+        <div class="task-check ${t.done?'checked':''}" onclick="toggleTask(${t.id})"></div>
+        <div class="task-text ${t.done?'done':''}">${t.text}</div>
+        <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
+        ${ddayHtml}
+        <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  function renderStats(){
+    const total=tasks.length;
+    const done=tasks.filter(t=>t.done).length;
+    const urgent=tasks.filter(t=>{ const dl=daysLeft(t.date); return !t.done&&dl!==null&&dl>=0&&dl<=3; }).length;
+    const next=tasks.filter(t=>!t.done&&t.date).map(t=>daysLeft(t.date)).filter(d=>d!==null&&d>=0).sort((a,b)=>a-b)[0];
+    document.getElementById('stat-total').textContent=total;
+    document.getElementById('stat-done').textContent=done;
+    document.getElementById('stat-urgent').textContent=urgent;
+    document.getElementById('stat-next').textContent=next!==undefined?`D-${next}`:'—';
+  }
+
+  function renderDday(){
+    const strip=document.getElementById('dday-strip');
+    const items=tasks.filter(t=>t.date).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
+    if(!items.length){ strip.innerHTML='<div class="dday-empty">마감일이 있는 항목을 추가하면 여기에 표시돼요</div>'; return; }
+    strip.innerHTML=items.map(t=>{
+      const dl=daysLeft(t.date);
+      const wrapCls=dl!==null&&dl>=0&&dl<=2?'urgent':dl===0?'gold-item':'';
+      // ✅ 버그 수정: D-DAY(0) 체크를 먼저
+      const numCls=dl<0?'muted':dl===0?'gold':dl!==null&&dl<=2?'red':'';
+      const label=dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
+      return `<div class="dday-item ${wrapCls}">
+        <div class="dday-name">${t.text}</div>
+        <div class="dday-num ${numCls}">${label}</div>
+        <div class="dday-date">${t.date.replace(/-/g,'.')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  renderAll();
+
+  // 메모
+  const memoEl=document.getElementById('memo');
+  try { memoEl.value=localStorage.getItem('knu-memo')||''; } catch(e){}
+  function saveMemo(){
+    try { localStorage.setItem('knu-memo',memoEl.value); } catch(e){}
+    const el=document.getElementById('memo-saved');
+    el.textContent='✓ SAVED'; setTimeout(()=>el.textContent='',2000);
+  }
+  memoEl.addEventListener('input',()=>{ clearTimeout(memoEl._t); memoEl._t=setTimeout(saveMemo,1500); });
+
+  // ══════════════════════════════════════
+  // 🔔 브라우저 알림
+  // ══════════════════════════════════════
+
+  // 알림 버튼 상태 업데이트
+  function updateNotifyBtn(){
+    const granted = Notification.permission === 'granted';
+    const btn = document.getElementById('notify-btn');
+    const dot = document.getElementById('notify-dot');
+    const label = document.getElementById('notify-label');
+    if(granted){
+      btn.classList.add('active');
+      dot.classList.remove('off');
+      label.textContent = '알림 ON';
+    } else {
+      btn.classList.remove('active');
+      dot.classList.add('off');
+      label.textContent = '알림 OFF';
+    }
+  }
+
+  // 알림 토글
+  async function toggleNotify(){
+    if(Notification.permission === 'granted'){
+      // 이미 허용 → 테스트 알림 전송
+      sendTestNotification();
+    } else if(Notification.permission === 'denied'){
+      alert('알림이 차단되어 있어요.\n브라우저 주소창 왼쪽 🔒 아이콘을 눌러\n알림을 허용해주세요!');
+    } else {
+      // 권한 요청
+      const result = await Notification.requestPermission();
+      updateNotifyBtn();
+      if(result === 'granted'){
+        sendTestNotification();
+        scheduleNotifications();
+      }
+    }
+  }
+
+  // 테스트 알림
+  function sendTestNotification(){
+    const urgent = tasks.filter(t => {
+      const dl = daysLeft(t.date);
+      return !t.done && dl !== null && dl >= 0 && dl <= 1;
+    });
+
+    if(urgent.length > 0){
+      new Notification('🔥 DLTNDKSC 대시보드', {
+        body: urgent.map(t => {
+          const dl = daysLeft(t.date);
+          return `${t.text} (${dl === 0 ? 'D-DAY' : 'D-' + dl})`;
+        }).join('\n'),
+        icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
+      });
+    } else {
+      new Notification('✅ DLTNDKSC 대시보드', {
+        body: '오늘/내일 마감 과제가 없어요! 알림이 설정됐어요 🎉',
+        icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
+      });
+    }
+  }
+
+  // 알림 스케줄러 — 매 분마다 오전 9시인지 체크
+  function scheduleNotifications(){
+    setInterval(() => {
+      if(Notification.permission !== 'granted') return;
+      const now = new Date();
+      // 오전 9시 0분 0~59초에 실행
+      if(now.getHours() === 9 && now.getMinutes() === 0){
+        const todayItems = tasks.filter(t => {
+          const dl = daysLeft(t.date);
+          return !t.done && dl !== null && dl >= 0 && dl <= 1;
+        });
+        if(todayItems.length > 0){
+          new Notification('📅 오늘의 마감 알림 — DLTNDKSC', {
+            body: todayItems.map(t => {
+              const dl = daysLeft(t.date);
+              return `• ${t.text} (${dl === 0 ? 'D-DAY' : 'D-' + dl})`;
+            }).join('\n'),
+            icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
+          });
+        }
+      }
+    }, 60000); // 1분마다 체크
+  }
+
+  // 초기화
+  updateNotifyBtn();
+  if(Notification.permission === 'granted'){
+    scheduleNotifications();
+  }
+</script>
+
+</body></html>

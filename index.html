@@ -289,6 +289,35 @@
   @media(max-width:768px){
     .row3{ grid-template-columns:1fr; }
     .stats-row{ grid-template-columns:repeat(2,1fr); }
+
+    /* 헤더 모바일 최적화 */
+    header {
+      height: auto;
+      padding: 10px 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .logo-sl, .logo-rest { font-size:20px; }
+    .header-date { font-size:10px; }
+    .btn-notify { font-size:11px; padding:3px 10px; }
+
+    /* topbar 모바일 */
+    .topbar { padding: 4px 16px; font-size:9px; }
+    #topbar-clock { font-size:11px; }
+
+    /* main 패딩 줄이기 */
+    main { padding: 16px 12px 40px; gap:14px; }
+
+    /* stats 폰트 */
+    .stat-num { font-size:28px; }
+
+    /* task input 모바일 */
+    .task-input-row { flex-wrap: wrap; }
+    .task-input-row input[type="text"] { width:100%; border-right:none; border-bottom:1px solid var(--border); }
+    .task-input-row input[type="date"] { flex:1; }
+    .task-input-row select { flex:1; }
+    .btn-add { width:100%; border-top:1px solid var(--border); }
   }
 </style>
 </head>

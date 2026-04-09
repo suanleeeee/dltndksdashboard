@@ -208,6 +208,17 @@
   .btn-del { background:none; border:none; color:var(--ink-muted); cursor:pointer; font-size:12px; padding:2px 4px; transition:color 0.15s; }
   .btn-del:hover { color:var(--red); }
 
+  /* TASKS / DONE 탭 */
+  .task-tabs { display:flex; border-bottom:1px solid var(--border); }
+  .task-tab {
+    flex:1; padding:9px 0; text-align:center;
+    font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+    color:var(--ink-muted); cursor:pointer; border-bottom:2px solid transparent;
+    transition:all 0.15s; background:none; border-top:none; border-left:none; border-right:none;
+  }
+  .task-tab:hover { color:var(--blue); }
+  .task-tab.active { color:var(--blue); border-bottom:2px solid var(--blue); }
+
   .empty-state { padding:32px 16px; text-align:center; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
 
   /* TIMETABLE */
@@ -338,20 +349,30 @@
 
   <!-- TASKS -->
   <div class="card">
-    <div class="card-title">TASKS &amp; ASSIGNMENTS <span class="sub">과제 · 시험 · 일정</span></div>
-    <div class="task-input-row">
-      <input type="text" id="task-input" placeholder="과제명 또는 일정 입력">
-      <input type="date" id="task-date">
-      <select id="task-tag">
-        <option value="assignment">과제</option>
-        <option value="exam">시험</option>
-        <option value="class">수업</option>
-        <option value="personal">개인</option>
-      </select>
-      <button class="btn-add" onclick="addTask()">+ ADD</button>
+    <div class="task-tabs">
+      <button class="task-tab active" id="tab-tasks" onclick="switchTab('tasks')">TASKS</button>
+      <button class="task-tab" id="tab-done" onclick="switchTab('done')">DONE</button>
     </div>
-    <div class="task-list" id="task-list">
-      <div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>
+    <div id="panel-tasks">
+      <div class="task-input-row">
+        <input type="text" id="task-input" placeholder="과제명 또는 일정 입력">
+        <input type="date" id="task-date">
+        <select id="task-tag">
+          <option value="assignment">과제</option>
+          <option value="exam">시험</option>
+          <option value="class">수업</option>
+          <option value="personal">개인</option>
+        </select>
+        <button class="btn-add" onclick="addTask()">+ ADD</button>
+      </div>
+      <div class="task-list" id="task-list">
+        <div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>
+      </div>
+    </div>
+    <div id="panel-done" style="display:none;">
+      <div class="task-list" id="done-list">
+        <div class="empty-state">완료된 항목이 없어요</div>
+      </div>
     </div>
   </div>
 
@@ -583,12 +604,23 @@
   function deleteTask(id){ tasks=tasks.filter(t=>t.id!==id); save(); renderAll(); }
 
   const TAG_LABEL={assignment:'과제',exam:'시험',class:'수업',personal:'개인'};
-  function renderAll(){ renderTasks(); renderStats(); renderDday(); }
+  function renderAll(){ renderTasks(); renderDone(); renderStats(); renderDday(); }
+
+  // 탭 전환
+  let currentTab = 'tasks';
+  function switchTab(tab){
+    currentTab = tab;
+    document.getElementById('tab-tasks').classList.toggle('active', tab==='tasks');
+    document.getElementById('tab-done').classList.toggle('active', tab==='done');
+    document.getElementById('panel-tasks').style.display = tab==='tasks' ? 'block' : 'none';
+    document.getElementById('panel-done').style.display = tab==='done' ? 'block' : 'none';
+  }
 
   function renderTasks(){
     const list=document.getElementById('task-list');
-    if(!tasks.length){ list.innerHTML='<div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>'; return; }
-    const sorted=[...tasks].sort((a,b)=>{
+    const active = tasks.filter(t => !t.done);
+    if(!active.length){ list.innerHTML='<div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>'; return; }
+    const sorted=[...active].sort((a,b)=>{
       if(!a.date) return 1; if(!b.date) return -1;
       return new Date(a.date)-new Date(b.date);
     });
@@ -596,16 +628,67 @@
       const dl=daysLeft(t.date);
       let ddayHtml='';
       if(dl!==null){
-        // ✅ 버그 수정: D-DAY(0) 체크를 dl<=2 보다 먼저
         const cls=dl<0?'':dl===0?'gold':dl<=2?'red':'';
         const label=dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
         ddayHtml=`<span class="task-dday ${cls}">${label}</span>`;
       }
       return `<div class="task-item">
-        <div class="task-check ${t.done?'checked':''}" onclick="toggleTask(${t.id})"></div>
-        <div class="task-text ${t.done?'done':''}">${t.text}</div>
+        <div class="task-check" onclick="toggleTask(${t.id})"></div>
+        <div class="task-text" ondblclick="editTask(${t.id}, this)" title="더블클릭으로 수정">${t.text}</div>
         <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
         ${ddayHtml}
+        <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  // 더블클릭 수정
+  function editTask(id, el){
+    const t = tasks.find(t => t.id === id);
+    if(!t) return;
+    const original = t.text;
+    el.contentEditable = 'true';
+    el.style.outline = '1px solid var(--border-blue)';
+    el.style.borderRadius = '2px';
+    el.style.padding = '1px 4px';
+    el.focus();
+    // 커서를 텍스트 끝으로
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    function finish(){
+      el.contentEditable = 'false';
+      el.style.outline = '';
+      el.style.borderRadius = '';
+      el.style.padding = '';
+      const newText = el.textContent.trim();
+      if(newText && newText !== original){
+        t.text = newText;
+        save(); renderAll();
+      } else {
+        el.textContent = original;
+      }
+    }
+    el.addEventListener('blur', finish, { once: true });
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+      if(e.key === 'Escape'){ el.textContent = original; el.blur(); }
+    }, { once: true });
+  }
+
+  function renderDone(){
+    const list=document.getElementById('done-list');
+    const done = tasks.filter(t => t.done);
+    if(!done.length){ list.innerHTML='<div class="empty-state">완료된 항목이 없어요</div>'; return; }
+    list.innerHTML=done.map(t=>{
+      return `<div class="task-item">
+        <div class="task-check checked" onclick="toggleTask(${t.id})"></div>
+        <div class="task-text done">${t.text}</div>
+        <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
         <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
       </div>`;
     }).join('');

@@ -707,7 +707,7 @@
 
   function renderDday(){
     const strip=document.getElementById('dday-strip');
-    const items=tasks.filter(t=>t.date).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
+    const items=tasks.filter(t=>t.date && !t.done).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
     if(!items.length){ strip.innerHTML='<div class="dday-empty">마감일이 있는 항목을 추가하면 여기에 표시돼요</div>'; return; }
     strip.innerHTML=items.map(t=>{
       const dl=daysLeft(t.date);

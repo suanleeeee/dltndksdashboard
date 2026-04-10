@@ -1,7 +1,6 @@
 <html lang="ko"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DLTNDKS 대시보드</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>DLTNDKS 대시보드</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -47,13 +46,7 @@
     letter-spacing: 2px;
     color: rgba(255,255,255,0.7);
   }
-
-  #topbar-clock {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.9);
-  }
+  #topbar-clock { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:3px; color:rgba(255,255,255,0.9); }
 
   header {
     background: rgba(248,248,246,0.96);
@@ -68,11 +61,11 @@
     z-index: 100;
     backdrop-filter: blur(12px);
   }
-
   .logo { display:flex; align-items:baseline; }
   .logo-sl { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; font-style:italic; letter-spacing:3px; color:var(--blue); }
   .logo-rest { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; font-style:italic; letter-spacing:3px; color:var(--ink); }
   .header-date { font-size:11px; color:var(--ink-sub); letter-spacing:1px; }
+  .header-btns { display:flex; align-items:center; gap:10px; }
 
   main {
     max-width: 1280px;
@@ -85,48 +78,29 @@
 
   .card { background:var(--bg-card); border:1px solid var(--border); }
   .card-title {
-    font-family:'Bebas Neue', sans-serif;
-    font-size:14px;
-    letter-spacing:3px;
-    color:var(--ink-sub);
-    padding:10px 16px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+    color:var(--ink-sub); padding:10px 16px; border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
   }
   .card-title .sub { font-family:'Noto Sans KR',sans-serif; font-size:10px; letter-spacing:1px; color:var(--ink-muted); }
 
   /* STATS */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-  }
-  .stat-box { padding: 18px 20px; border-right: 1px solid var(--border); }
-  .stat-box:last-child { border-right: none; }
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); background:var(--bg-card); border:1px solid var(--border); }
+  .stat-box { padding:18px 20px; border-right:1px solid var(--border); }
+  .stat-box:last-child { border-right:none; }
   .stat-label { font-size:9px; letter-spacing:3px; color:var(--ink-muted); font-weight:700; margin-bottom:6px; }
   .stat-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--blue); line-height:1; }
-  .stat-num.red { color: var(--red); }
+  .stat-num.red { color:var(--red); }
   .stat-sub { font-size:10px; color:var(--ink-sub); margin-top:3px; }
 
   /* D-DAY */
-  .dday-strip { display: flex; overflow-x: auto; }
+  .dday-strip { display:flex; overflow-x:auto; }
   .dday-strip::-webkit-scrollbar { height:3px; }
   .dday-strip::-webkit-scrollbar-thumb { background:var(--border-blue); }
-
-  .dday-item {
-    flex: 0 0 auto;
-    min-width: 130px;
-    padding: 14px 16px;
-    border-right: 1px solid var(--border);
-    position: relative;
-  }
-  .dday-item::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--blue); }
-  .dday-item.urgent::before { background: var(--red); }
-  .dday-item.gold-item::before { background: var(--gold); }
-
+  .dday-item { flex:0 0 auto; min-width:130px; padding:14px 16px; border-right:1px solid var(--border); position:relative; }
+  .dday-item::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--blue); }
+  .dday-item.urgent::before { background:var(--red); }
+  .dday-item.gold-item::before { background:var(--gold); }
   .dday-name { font-size:10px; color:var(--ink-sub); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
   .dday-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--blue); line-height:1; }
   .dday-num.red { color:var(--red); }
@@ -136,30 +110,27 @@
   .dday-empty { padding:16px; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
 
   /* LAYOUT */
-  .row3 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 
   /* TASK INPUT */
   .task-input-row { display:flex; border-bottom:1px solid var(--border); }
-
   .task-input-row input[type="text"] {
     flex:1; border:none; border-right:1px solid var(--border);
     padding:11px 14px; font-family:'Noto Sans KR',sans-serif; font-size:12px;
     background:transparent; color:var(--ink); outline:none;
   }
   .task-input-row input[type="text"]::placeholder { color:var(--ink-muted); }
-
   .task-input-row input[type="date"] {
-    border:none; border-right:1px solid var(--border);
-    padding:11px 10px; font-size:11px; background:transparent;
+    border:none; padding:11px 10px; font-size:11px; background:transparent;
     color:var(--ink-mid); outline:none; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
   }
-
+  .task-input-row input[type="date"]:not(:focus)::-webkit-datetime-edit { color:transparent; }
+  .task-input-row input[type="date"]:focus::-webkit-datetime-edit { color:var(--ink-mid); }
   .task-input-row select {
     border:none; border-right:1px solid var(--border);
     padding:11px 8px; font-size:11px; background:transparent;
     color:var(--ink-mid); outline:none; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
   }
-
   .btn-add {
     background:var(--blue); border:none; color:white;
     padding:11px 20px; font-family:'Bebas Neue',sans-serif;
@@ -172,43 +143,36 @@
   .task-list { max-height:320px; overflow-y:auto; }
   .task-list::-webkit-scrollbar { width:3px; }
   .task-list::-webkit-scrollbar-thumb { background:var(--border-blue); }
-
   .task-item {
     display:flex; align-items:center; gap:10px;
     padding:10px 16px; border-bottom:1px solid var(--border);
-    transition:background 0.15s;
-    animation: fadeIn 0.2s ease;
+    transition:background 0.15s; animation:fadeIn 0.2s ease;
   }
   @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
   .task-item:hover { background:var(--bg-hover); }
   .task-item:last-child { border-bottom:none; }
-
   .task-check {
     width:15px; height:15px; border:1.5px solid var(--border-blue);
     cursor:pointer; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    transition:all 0.15s;
+    display:flex; align-items:center; justify-content:center; transition:all 0.15s;
   }
   .task-check.checked { background:var(--blue); border-color:var(--blue); }
   .task-check.checked::after { content:'✓'; color:white; font-size:9px; font-weight:bold; }
-
   .task-text { flex:1; font-size:12px; color:var(--ink); }
   .task-text.done { color:var(--ink-muted); text-decoration:line-through; }
-
   .tag { font-size:9px; letter-spacing:1px; padding:2px 7px; font-weight:700; }
   .tag-assignment { background:var(--blue-pale); color:var(--blue); }
   .tag-exam { background:rgba(192,57,43,0.1); color:var(--red); }
   .tag-personal { background:var(--gold-bg); color:var(--gold); }
   .tag-class { background:rgba(29,111,66,0.1); color:var(--green); }
-
   .task-dday { font-family:'Bebas Neue',sans-serif; font-size:14px; color:var(--ink-muted); letter-spacing:1px; min-width:40px; text-align:right; }
   .task-dday.red { color:var(--red); }
   .task-dday.gold { color:var(--gold); }
-
   .btn-del { background:none; border:none; color:var(--ink-muted); cursor:pointer; font-size:12px; padding:2px 4px; transition:color 0.15s; }
   .btn-del:hover { color:var(--red); }
+  .empty-state { padding:32px 16px; text-align:center; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
 
-  /* TASKS / DONE 탭 */
+  /* TASKS/DONE 탭 */
   .task-tabs { display:flex; border-bottom:1px solid var(--border); }
   .task-tab {
     flex:1; padding:9px 0; text-align:center;
@@ -219,33 +183,128 @@
   .task-tab:hover { color:var(--blue); }
   .task-tab.active { color:var(--blue); border-bottom:2px solid var(--blue); }
 
-  .empty-state { padding:32px 16px; text-align:center; font-size:11px; color:var(--ink-muted); letter-spacing:1px; }
+  /* ── 시간표 ── */
+  table.timetable { width:100%; border-collapse:collapse; font-size:11px; table-layout:fixed; }
+  table.timetable th {
+    font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:1px;
+    color:var(--ink-sub); padding:8px 4px; border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border); text-align:center; font-weight:400;
+  }
+  table.timetable th:first-child { width:56px; }
+  table.timetable th:last-child { border-right:none; }
+  table.timetable th.today-col { color:var(--blue); background:var(--blue-pale); }
+  table.timetable td {
+    padding:4px 3px; border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border); text-align:center; vertical-align:top;
+    font-size:10px; color:var(--ink-muted); min-height:28px;
+  }
+  table.timetable td:first-child { color:rgba(7,76,161,0.45); font-size:9px; letter-spacing:1px; padding:6px 4px; }
+  table.timetable td:last-child { border-right:none; }
+  table.timetable td.today-bg { background:var(--blue-row); }
+  .class-block {
+    background:var(--blue); color:white; border-radius:2px;
+    padding:4px 3px; font-size:10px; line-height:1.4; cursor:pointer;
+    position:relative; transition:opacity 0.15s;
+  }
+  .class-block:hover { opacity:0.85; }
+  .class-block .cb-name { font-weight:600; display:block; }
+  .class-block .cb-room { font-size:8px; color:rgba(255,255,255,0.75); display:block; }
+  .class-block .cb-time { font-size:8px; color:rgba(255,255,255,0.6); display:block; }
+  .class-block .cb-del {
+    position:absolute; top:2px; right:3px; font-size:9px;
+    color:rgba(255,255,255,0.6); cursor:pointer; line-height:1;
+    background:none; border:none; padding:0;
+  }
+  .class-block .cb-del:hover { color:white; }
+  .tt-add-btn {
+    width:100%; padding:3px 0; font-size:10px; color:var(--border-blue);
+    background:none; border:none; cursor:pointer; letter-spacing:1px;
+    font-family:'Bebas Neue',sans-serif; transition:color 0.15s;
+  }
+  .tt-add-btn:hover { color:var(--blue); }
 
-  /* TIMETABLE */
-  .timetable-wrap { overflow-x:auto; }
-  table.tt { width:100%; border-collapse:collapse; font-size:11px; table-layout:fixed; }
+  /* 시간표 입력 모달 */
+  .tt-modal-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.35); z-index:200;
+    align-items:center; justify-content:center;
+  }
+  .tt-modal-overlay.open { display:flex; }
+  .tt-modal {
+    background:var(--bg-card); border:1px solid var(--border);
+    padding:24px; width:320px; max-width:90vw;
+  }
+  .tt-modal-title { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:3px; color:var(--ink-sub); margin-bottom:16px; }
+  .tt-field { margin-bottom:12px; }
+  .tt-field label { display:block; font-size:9px; letter-spacing:2px; color:var(--ink-muted); font-weight:700; margin-bottom:4px; }
+  .tt-field input, .tt-field select {
+    width:100%; border:1px solid var(--border); padding:8px 10px;
+    font-family:'Noto Sans KR',sans-serif; font-size:12px;
+    background:transparent; color:var(--ink); outline:none;
+  }
+  .tt-field input:focus, .tt-field select:focus { border-color:var(--border-blue); }
+  .tt-modal-btns { display:flex; gap:8px; margin-top:16px; }
+  .tt-modal-btns button {
+    flex:1; padding:9px; font-family:'Bebas Neue',sans-serif;
+    font-size:13px; letter-spacing:2px; cursor:pointer; border:none;
+  }
+  .btn-tt-save { background:var(--blue); color:white; }
+  .btn-tt-save:hover { opacity:0.85; }
+  .btn-tt-cancel { background:none; border:1px solid var(--border) !important; color:var(--ink-sub); }
+  .btn-tt-cancel:hover { background:var(--bg-hover); }
+
+  /* 모듈 테이블 */
+  table.tt { width:100%; border-collapse:collapse; font-size:11px; }
   table.tt th {
     font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:1px;
-    color:var(--ink-sub); padding:8px 2px; border-bottom:1px solid var(--border);
+    color:var(--ink-sub); padding:8px 4px; border-bottom:1px solid var(--border);
     border-right:1px solid var(--border); text-align:center; font-weight:400;
-    width:calc((100% - 52px) / 5);
   }
   table.tt th:last-child { border-right:none; }
-  table.tt th.today-th { color:var(--blue); background:var(--blue-pale); }
-  table.tt td {
-    padding:5px 3px; border-bottom:1px solid var(--border);
-    border-right:1px solid var(--border); text-align:center;
-    color:var(--ink-muted); font-size:10px;
-  }
+  table.tt td { padding:5px 3px; border-bottom:1px solid var(--border); border-right:1px solid var(--border); text-align:center; color:var(--ink-muted); font-size:10px; }
   table.tt td:last-child { border-right:none; }
-  table.tt td.time-col { color:rgba(7,76,161,0.45); font-size:9px; letter-spacing:1px; width:52px; }
-  table.tt td.today-col { background:var(--blue-row); }
-  .class-cell { background:var(--blue); color:white; padding:5px 3px; font-size:10px; border-radius:1px; line-height:1.5; }
-  .class-room { display:block; font-size:8px; color:rgba(255,255,255,0.7); margin-top:1px; }
 
-  /* MEMO */
+  /* QUICK LINKS */
+  .qlink { display:block; border:1px solid var(--border); padding:12px 16px; margin-bottom:10px; text-decoration:none; transition:background 0.15s; }
+  .qlink:last-child { margin-bottom:0; }
+  .qlink:hover { background:var(--bg-hover); }
+  .qlink-label { font-size:9px; letter-spacing:3px; color:var(--ink-muted); margin-bottom:4px; }
+  .qlink-name { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--blue); }
+
+  /* 헤더 버튼들 */
+  .btn-header {
+    background:none; border:1px solid var(--border-blue); color:var(--blue);
+    padding:4px 12px; font-family:'Bebas Neue',sans-serif; font-size:12px;
+    letter-spacing:2px; cursor:pointer; transition:background 0.15s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .btn-header:hover { background:var(--blue-pale); }
+  .btn-header.active { background:var(--blue); color:white; border-color:var(--blue); }
+  .notify-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
+  .notify-dot.off { background:var(--ink-muted); }
+
+  /* 메모 팝업 */
+  .memo-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.35); z-index:200;
+    align-items:flex-start; justify-content:flex-end;
+    padding:80px 32px 0;
+  }
+  .memo-overlay.open { display:flex; }
+  .memo-popup {
+    background:var(--bg-card); border:1px solid var(--border);
+    width:360px; max-width:90vw;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .memo-popup-title {
+    font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+    color:var(--ink-sub); padding:10px 16px; border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .memo-close { background:none; border:none; cursor:pointer; color:var(--ink-muted); font-size:14px; }
+  .memo-close:hover { color:var(--red); }
   .memo-area {
-    width:100%; height:230px; border:none; padding:14px 16px;
+    width:100%; height:240px; border:none; padding:14px 16px;
     font-family:'Noto Sans KR',sans-serif; font-size:12px;
     color:var(--ink); background:transparent; resize:none; outline:none; line-height:1.8;
   }
@@ -258,28 +317,6 @@
   }
   .btn-save:hover { background:var(--blue-pale); }
 
-  /* 알림 버튼 */
-  .btn-notify {
-    background:none; border:1px solid var(--border-blue); color:var(--blue);
-    padding:4px 12px; font-family:'Bebas Neue',sans-serif; font-size:12px;
-    letter-spacing:2px; cursor:pointer; transition:background 0.15s;
-    display:flex; align-items:center; gap:6px;
-  }
-  .btn-notify:hover { background:var(--blue-pale); }
-  .btn-notify.active { background:var(--blue); color:white; border-color:var(--blue); }
-  .notify-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
-  .notify-dot.off { background:var(--ink-muted); }
-
-  /* QUICK LINKS */
-  .qlink {
-    display:block; border:1px solid var(--border); padding:12px 16px;
-    margin-bottom:10px; text-decoration:none; transition:background 0.15s;
-  }
-  .qlink:last-child { margin-bottom:0; }
-  .qlink:hover { background:var(--bg-hover); }
-  .qlink-label { font-size:9px; letter-spacing:3px; color:var(--ink-muted); margin-bottom:4px; }
-  .qlink-name { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--blue); }
-
   footer {
     background:var(--bg-card); border-top:1px solid var(--border);
     padding:14px 32px; display:flex; justify-content:space-between;
@@ -287,51 +324,106 @@
   }
 
   @media(max-width:768px){
-    .row3{ grid-template-columns:1fr; }
+    .row2{ grid-template-columns:1fr; }
     .stats-row{ grid-template-columns:repeat(2,1fr); }
-/* 안드로이드 터치 최적화 */
-.task-check { width:20px; height:20px; }
-.btn-del { padding:6px 8px; font-size:14px; }
-.tt-add-btn { padding:8px 0; font-size:12px; }
-.btn-add { font-size:13px; }
-.task-tab { padding:12px 0; font-size:13px; }
-.dday-item { min-width:110px; padding:12px; }
-.qlink { padding:14px 16px; }
-* { -webkit-tap-highlight-color: transparent; }
-input, select, button { font-size:16px !important; } /* 안드로이드 자동 줌 방지 */
-
-    /* 헤더 모바일 최적화 */
-    header {
-      height: auto;
-      padding: 10px 16px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
+    header { height:auto; padding:10px 16px; flex-direction:column; align-items:flex-start; gap:6px; }
     .logo-sl, .logo-rest { font-size:20px; }
     .header-date { font-size:10px; }
-    .btn-notify { font-size:11px; padding:3px 10px; }
-
-    /* topbar 모바일 */
-    .topbar { padding: 4px 16px; font-size:9px; }
+    .header-btns { gap:6px; flex-wrap:wrap; }
+    .btn-header { font-size:11px; padding:3px 10px; }
+    .topbar { padding:4px 16px; font-size:9px; }
     #topbar-clock { font-size:11px; }
-
-    /* main 패딩 줄이기 */
-    main { padding: 16px 12px 40px; gap:14px; }
-
-    /* stats 폰트 */
+    main { padding:16px 12px 40px; gap:14px; }
     .stat-num { font-size:28px; }
+    .stat-label { font-size:8px; letter-spacing:2px; }
+    .task-check { width:20px; height:20px; }
+    .btn-del { padding:6px 8px; }
+    .task-tab { padding:12px 0; }
+    * { -webkit-tap-highlight-color: transparent; }
+    input, select, button { font-size:16px !important; }
 
-    /* task input 모바일 */
-    .task-input-row { flex-wrap: wrap; }
-    .task-input-row input[type="text"] { width:100%; border-right:none; border-bottom:1px solid var(--border); }
-    .task-input-row input[type="date"] { flex:1; }
-    .task-input-row select { flex:1; }
-    .btn-add { width:100%; border-top:1px solid var(--border); }
+
+    /* 과제 입력 안드로이드 최적화 */
+    .task-input-row { flex-wrap:wrap; }
+    .task-input-row input[type="text"] { width:100%; border-right:none; border-bottom:1px solid var(--border); font-size:14px; padding:13px 14px; }
+    .task-input-row input[type="date"] { flex:1; min-width:0; font-size:13px; padding:12px 6px; }
+    .task-input-row select { flex:1; min-width:0; font-size:13px; padding:12px 4px; }
+    .btn-add { width:100%; border-top:1px solid var(--border); padding:12px; font-size:15px; }
+
+    /* 태스크 아이템 터치 영역 */
+    .task-item { padding:13px 12px; }
+    .task-check { width:20px; height:20px; }
+    .task-text { font-size:13px; }
+    .btn-del { font-size:16px; padding:4px 8px; }
+    .task-tab { padding:12px 0; font-size:13px; }
+
+    /* 시간표 모바일 */
+    table.timetable { font-size:9px; }
+    table.timetable th { font-size:10px; padding:6px 2px; }
+    table.timetable td { padding:3px 2px; }
+    table.timetable td:first-child { font-size:8px; padding:4px 2px; }
+    .class-block { font-size:9px; padding:3px 2px; }
+    .class-block .cb-name { font-size:9px; }
+    .tt-add-btn { font-size:9px; padding:4px 0; }
+
+    /* QUICK LINKS 모바일 */
+    .card > div[style*="grid-template-columns:repeat(4"] { grid-template-columns:repeat(2,1fr) !important; }
+
+    /* 메모 팝업 */
+    .memo-overlay { padding:70px 12px 0; }
+    .memo-popup { width:100%; }
+
+    /* 시간표 입력 모달 */
+    .tt-modal { width:90vw; padding:20px; }
+    .tt-field input, .tt-field select { font-size:14px; padding:10px; }
+    .tt-modal-btns button { padding:12px; font-size:14px; }
+
+    /* D-DAY 카드 */
+    .dday-item { min-width:110px; padding:12px; }
+    .dday-num { font-size:24px; }
   }
 </style>
 </head>
 <body>
+
+<!-- 시간표 입력 모달 -->
+<div class="tt-modal-overlay" id="tt-modal-overlay" onclick="closeTTModal(event)">
+  <div class="tt-modal" onclick="event.stopPropagation()">
+    <div class="tt-modal-title">수업 추가</div>
+    <input type="hidden" id="tt-modal-day">
+    <div class="tt-field">
+      <label>강의명</label>
+      <input type="text" id="tt-name" placeholder="예: 파이썬기초">
+    </div>
+    <div class="tt-field">
+      <label>강의실</label>
+      <input type="text" id="tt-room" placeholder="예: 천201">
+    </div>
+    <div class="tt-field">
+      <label>시작 시간</label>
+      <input type="time" id="tt-time" value="09:00">
+    </div>
+    <div class="tt-modal-btns">
+      <button class="btn-tt-save" onclick="saveTTClass()">저장</button>
+      <button class="btn-tt-cancel" onclick="closeTTModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 메모 팝업 -->
+<div class="memo-overlay" id="memo-overlay" onclick="closeMemo(event)">
+  <div class="memo-popup" onclick="event.stopPropagation()">
+    <div class="memo-popup-title">
+      MEMO
+      <button class="memo-close" onclick="closeMemo()">✕</button>
+    </div>
+    <textarea class="memo-area" id="memo" placeholder="자유롭게 메모하세요..."></textarea>
+    <div class="memo-footer">
+      <span class="memo-saved" id="memo-saved"></span>
+      <button class="btn-save" onclick="saveMemo()">SAVE</button>
+    </div>
+  </div>
+</div>
 
 <div class="topbar">
   <span>2026학년도 1학기</span>
@@ -343,8 +435,9 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     <span class="logo-sl">DLTNDKSC</span>
     <span class="logo-rest">&nbsp;DASHBOARD</span>
   </div>
-  <div style="display:flex;align-items:center;gap:16px;">
-    <button class="btn-notify" id="notify-btn" onclick="toggleNotify()">
+  <div class="header-btns">
+    <button class="btn-header" onclick="toggleMemo()">📝 MEMO</button>
+    <button class="btn-header" id="notify-btn" onclick="toggleNotify()">
       <span class="notify-dot off" id="notify-dot"></span>
       <span id="notify-label">알림 OFF</span>
     </button>
@@ -357,14 +450,14 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat-box">
-      <div class="stat-label">TOTAL TASKS</div>
+      <div class="stat-label">REMAINING</div>
       <div class="stat-num" id="stat-total">0</div>
-      <div class="stat-sub">전체 할 일</div>
+      <div class="stat-sub">미완료 할 일</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">COMPLETED</div>
-      <div class="stat-num" id="stat-done">0</div>
-      <div class="stat-sub">완료</div>
+      <div class="stat-label">NEXT DEADLINE</div>
+      <div class="stat-num" id="stat-next">—</div>
+      <div class="stat-sub">다음 마감까지</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">URGENT</div>
@@ -372,9 +465,9 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
       <div class="stat-sub">3일 이내 마감</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">NEXT DEADLINE</div>
-      <div class="stat-num" id="stat-next">—</div>
-      <div class="stat-sub">다음 마감까지</div>
+      <div class="stat-label">NEXT EXAM</div>
+      <div class="stat-num" id="stat-exam">—</div>
+      <div class="stat-sub">다음 시험까지</div>
     </div>
   </div>
 
@@ -395,7 +488,10 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     <div id="panel-tasks">
       <div class="task-input-row">
         <input type="text" id="task-input" placeholder="과제명 또는 일정 입력">
-        <input type="date" id="task-date">
+        <div style="position:relative;border-right:1px solid var(--border);display:flex;align-items:center;">
+          <span id="date-label" style="position:absolute;left:10px;font-size:10px;color:var(--ink-muted);pointer-events:none;letter-spacing:1px;">날짜</span>
+          <input type="date" id="task-date" style="padding-left:36px;">
+        </div>
         <select id="task-tag">
           <option value="assignment">과제</option>
           <option value="exam">시험</option>
@@ -415,25 +511,26 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     </div>
   </div>
 
-  <!-- TIMETABLE + 모듈 2분할 -->
-  <div class="row3">
+  <!-- 시간표 + 모듈 (2분할) -->
+  <div class="row2">
 
-    <!-- 시간표 이미지/PDF 업로드 -->
+    <!-- 시간표 직접 입력 -->
     <div class="card">
       <div class="card-title">TIMETABLE <span class="sub" id="today-label"></span></div>
-      <div id="tt-upload-area" style="padding:20px;text-align:center;border-bottom:1px solid var(--border);">
-        <label for="tt-file" style="cursor:pointer;display:block;">
-          <div style="border:2px dashed var(--border-blue);padding:28px 16px;transition:background 0.15s;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--blue);margin-bottom:6px;">📎 파일 업로드</div>
-            <div style="font-size:11px;color:var(--ink-muted);">이미지(JPG·PNG) 또는 PDF · 클릭하거나 드래그</div>
-          </div>
-        </label>
-        <input type="file" id="tt-file" accept="image/*,.pdf" style="display:none;" onchange="handleTTFile(this)">
-      </div>
-      <div id="tt-preview" style="display:none;position:relative;">
-        <button onclick="clearTT()" style="position:absolute;top:8px;right:8px;background:var(--red);border:none;color:white;font-size:11px;padding:4px 10px;cursor:pointer;z-index:1;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">✕ 삭제</button>
-        <img id="tt-img" style="width:100%;display:none;">
-        <iframe id="tt-pdf" style="width:100%;height:420px;border:none;display:none;"></iframe>
+      <div style="overflow-x:auto;">
+        <table class="timetable" id="timetable">
+          <thead>
+            <tr>
+              <th></th>
+              <th id="th-mon">MON</th>
+              <th id="th-tue">TUE</th>
+              <th id="th-wed">WED</th>
+              <th id="th-thu">THU</th>
+              <th id="th-fri">FRI</th>
+            </tr>
+          </thead>
+          <tbody id="timetable-body"></tbody>
+        </table>
       </div>
     </div>
 
@@ -454,40 +551,28 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
         <tbody id="module-body"></tbody>
       </table>
     </div>
-
   </div>
 
-  <!-- MEMO + QUICK LINKS -->
-  <div class="row3">
-    <div class="card">
-      <div class="card-title">MEMO <span class="sub">자유 메모</span></div>
-      <textarea class="memo-area" id="memo" placeholder="자유롭게 메모하세요..."></textarea>
-      <div class="memo-footer">
-        <span class="memo-saved" id="memo-saved"></span>
-        <button class="btn-save" onclick="saveMemo()">SAVE</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">QUICK LINKS <span class="sub">바로가기</span></div>
-      <div style="padding:16px;">
-        <a class="qlink" href="https://ecampus.kangnam.ac.kr" target="_blank">
-          <div class="qlink-label">이러닝 캠퍼스</div>
-          <div class="qlink-name">ECAMPUS →</div>
-        </a>
-        <a class="qlink" href="https://lib.kangnam.ac.kr" target="_blank">
-          <div class="qlink-label">중앙도서관</div>
-          <div class="qlink-name">LIBRARY →</div>
-        </a>
-        <a class="qlink" href="https://knusso.kangnam.ac.kr" target="_blank">
-          <div class="qlink-label">학교 포털</div>
-          <div class="qlink-name">PORTAL →</div>
-        </a>
-        <a class="qlink" href="https://verius.kangnam.ac.kr/main.do" target="_blank">
-          <div class="qlink-label">참인재시스템</div>
-          <div class="qlink-name">VERIUS →</div>
-        </a>
-      </div>
+  <!-- QUICK LINKS (전체 너비) -->
+  <div class="card">
+    <div class="card-title">QUICK LINKS <span class="sub">바로가기</span></div>
+    <div style="padding:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+      <a class="qlink" href="https://ecampus.kangnam.ac.kr" target="_blank" style="margin-bottom:0;">
+        <div class="qlink-label">이러닝 캠퍼스</div>
+        <div class="qlink-name">ECAMPUS →</div>
+      </a>
+      <a class="qlink" href="https://lib.kangnam.ac.kr" target="_blank" style="margin-bottom:0;">
+        <div class="qlink-label">중앙도서관</div>
+        <div class="qlink-name">LIBRARY →</div>
+      </a>
+      <a class="qlink" href="https://knusso.kangnam.ac.kr" target="_blank" style="margin-bottom:0;">
+        <div class="qlink-label">학교 포털</div>
+        <div class="qlink-name">PORTAL →</div>
+      </a>
+      <a class="qlink" href="https://verius.kangnam.ac.kr/main.do" target="_blank" style="margin-bottom:0;">
+        <div class="qlink-label">참인재시스템</div>
+        <div class="qlink-name">VERIUS →</div>
+      </a>
     </div>
   </div>
 
@@ -503,7 +588,7 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
 
 <script>
   // ══════════════════════════════════════
-  // 📋 전공탐색 모듈 일정
+  // 전공탐색 모듈 일정
   // ══════════════════════════════════════
   const MODULES = [
     { module:'모듈1', major:'시니어비즈니스학과', weeks:'2주차',  date:'2026.03.11', prof:'이성철', room:'교105' },
@@ -518,6 +603,15 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     { module:'모듈5', major:'문화콘텐츠학과',     weeks:'12주차', date:'2026.05.20', prof:'안진경', room:'샬B108' },
   ];
 
+  const DAYS = ['mon','tue','wed','thu','fri'];
+  const DAY_JS = [1,2,3,4,5];
+  const DAY_KO = ['월','화','수','목','금'];
+  // 시간표 시간 슬롯
+  const TIME_SLOTS = ['09:00','09:50','10:40','11:30','12:20','13:10','14:00','14:50','15:40','16:30','17:20','18:10','19:00','19:50','20:40'];
+
+  // 기본 시간 슬롯 (09:00~21:00, 매 시간)
+  const BASE_SLOTS = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+
   function pad(n){ return String(n).padStart(2,'0'); }
 
   // 시계
@@ -531,61 +625,119 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
   }
   setInterval(tick,1000); tick();
 
-  // 시간표 파일 업로드
-  function handleTTFile(input){
-    const file = input.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const data = e.target.result;
-      document.getElementById('tt-upload-area').style.display = 'none';
-      document.getElementById('tt-preview').style.display = 'block';
-      if(file.type === 'application/pdf'){
-        document.getElementById('tt-pdf').src = data;
-        document.getElementById('tt-pdf').style.display = 'block';
-        document.getElementById('tt-img').style.display = 'none';
+  // ══════════════════════════════════════
+  // 시간표 직접 입력
+  // ══════════════════════════════════════
+  let ttClasses = {};
+  try { ttClasses = JSON.parse(localStorage.getItem('knu-timetable') || '{}'); } catch(e){}
+
+  function saveTT(){ try{ localStorage.setItem('knu-timetable', JSON.stringify(ttClasses)); }catch(e){} }
+
+  let ttModalDay = null;
+
+  function openTTModal(day){
+    ttModalDay = day;
+    document.getElementById('tt-modal-day').value = day;
+    document.getElementById('tt-name').value = '';
+    document.getElementById('tt-room').value = '';
+    document.getElementById('tt-time').value = '09:00';
+    document.getElementById('tt-modal-overlay').classList.add('open');
+    setTimeout(()=>document.getElementById('tt-name').focus(), 100);
+  }
+
+  function closeTTModal(e){
+    if(!e || e.target === document.getElementById('tt-modal-overlay')){
+      document.getElementById('tt-modal-overlay').classList.remove('open');
+    }
+  }
+
+  function saveTTClass(){
+    const day = ttModalDay;
+    const name = document.getElementById('tt-name').value.trim();
+    const room = document.getElementById('tt-room').value.trim();
+    const time = document.getElementById('tt-time').value;
+    if(!name) { document.getElementById('tt-name').focus(); return; }
+    if(!ttClasses[day]) ttClasses[day] = [];
+    ttClasses[day].push({ name, room, time, id: Date.now() });
+    ttClasses[day].sort((a,b) => a.time.localeCompare(b.time));
+    saveTT();
+    renderTimetable();
+    document.getElementById('tt-modal-overlay').classList.remove('open');
+  }
+
+  function deleteTTClass(day, id){
+    if(!ttClasses[day]) return;
+    ttClasses[day] = ttClasses[day].filter(c => c.id !== id);
+    saveTT();
+    renderTimetable();
+  }
+
+  function renderTimetable(){
+    const today = new Date().getDay();
+    const thIds = ['th-mon','th-tue','th-wed','th-thu','th-fri'];
+    thIds.forEach((id,i)=>{
+      const el = document.getElementById(id);
+      if(DAY_JS[i] === today){
+        el.classList.add('today-col');
+        document.getElementById('today-label').textContent = `오늘 · ${DAY_KO[i]}요일`;
       } else {
-        document.getElementById('tt-img').src = data;
-        document.getElementById('tt-img').style.display = 'block';
-        document.getElementById('tt-pdf').style.display = 'none';
+        el.classList.remove('today-col');
       }
-      try {
-        localStorage.setItem('knu-tt-file', data);
-        localStorage.setItem('knu-tt-type', file.type);
-      } catch(e) { console.warn('Storage full'); }
-    };
-    reader.readAsDataURL(file);
-  }
+    });
 
-  function clearTT(){
-    document.getElementById('tt-upload-area').style.display = 'block';
-    document.getElementById('tt-preview').style.display = 'none';
-    document.getElementById('tt-img').src = '';
-    document.getElementById('tt-pdf').src = '';
-    document.getElementById('tt-file').value = '';
-    localStorage.removeItem('knu-tt-file');
-    localStorage.removeItem('knu-tt-type');
-  }
+    const tbody = document.getElementById('timetable-body');
 
-  function loadTT(){
-    try {
-      const data = localStorage.getItem('knu-tt-file');
-      const type = localStorage.getItem('knu-tt-type');
-      if(!data) return;
-      document.getElementById('tt-upload-area').style.display = 'none';
-      document.getElementById('tt-preview').style.display = 'block';
-      if(type === 'application/pdf'){
-        document.getElementById('tt-pdf').src = data;
-        document.getElementById('tt-pdf').style.display = 'block';
-      } else {
-        document.getElementById('tt-img').src = data;
-        document.getElementById('tt-img').style.display = 'block';
-      }
-    } catch(e) { console.warn('Storage error'); }
-  }
-  loadTT();
+    // 09:00~21:00 기본 슬롯 + 수업 있는 시간대
+    const allTimes = new Set();
+    DAYS.forEach(d => {
+      if(ttClasses[d]) ttClasses[d].forEach(c => allTimes.add(c.time));
+    });
+    const mergedSlots = [...new Set([...BASE_SLOTS, ...allTimes])].sort();
 
+    tbody.innerHTML = mergedSlots.map(time => {
+      const cells = DAYS.map((d, i) => {
+        const isToday = DAY_JS[i] === today;
+        const classes = (ttClasses[d] || []).filter(c => c.time === time);
+        const tdClass = isToday ? 'today-bg' : '';
+        const content = classes.map(c =>
+          `<div class="class-block">
+            <button class="cb-del" onclick="deleteTTClass('${d}',${c.id})">✕</button>
+            <span class="cb-name">${c.name}</span>
+            ${c.room ? `<span class="cb-room">${c.room}</span>` : ''}
+            <span class="cb-time">${c.time}</span>
+          </div>`
+        ).join('');
+        return `<td class="${tdClass}">${content}</td>`;
+      }).join('');
+
+      return `<tr>
+        <td>${time}</td>
+        ${cells}
+      </tr>`;
+    }).join('');
+
+    // 각 요일 헤더 아래 + 버튼 행 추가
+    const addRow = `<tr>
+      ${DAYS.map((d,i) => {
+        const isToday = DAY_JS[i] === today;
+        return `<td class="${isToday?'today-bg':''}" style="padding:2px;">
+          <button class="tt-add-btn" onclick="openTTModal('${d}')">+ 추가</button>
+        </td>`;
+      }).join('')}
+    </tr>`;
+
+    tbody.innerHTML += `<tr><td></td>${DAYS.map((d,i)=>{
+      const isToday = DAY_JS[i] === today;
+      return `<td class="${isToday?'today-bg':''}" style="padding:2px;">
+        <button class="tt-add-btn" onclick="openTTModal('${d}')">+ 추가</button>
+      </td>`;
+    }).join('')}</tr>`;
+  }
+  renderTimetable();
+
+  // ══════════════════════════════════════
   // 모듈 일정
+  // ══════════════════════════════════════
   function renderModules(){
     const now = new Date();
     const todayStr = `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())}`;
@@ -607,9 +759,7 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
   renderModules();
 
   // ══════════════════════════════════════
-  // ✅ 버그 수정: daysLeft - 날짜 파싱 안전하게
-  // input[type="date"] 는 "2026-04-08" 형식으로 반환
-  // new Date("2026-04-08") 은 Safari 등에서 NaN 반환 → 수정
+  // 날짜 파싱 (Safari 버그 방지)
   // ══════════════════════════════════════
   function daysLeft(d){
     if(!d) return null;
@@ -622,68 +772,38 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     return Math.ceil((target - today) / 86400000);
   }
 
+  // ══════════════════════════════════════
   // 할 일
+  // ══════════════════════════════════════
   let tasks = [];
-  try { tasks = JSON.parse(localStorage.getItem('knu-tasks')||'[]'); } catch(e) {}
-  function save(){ try { localStorage.setItem('knu-tasks',JSON.stringify(tasks)); } catch(e){} }
+  try { tasks = JSON.parse(localStorage.getItem('knu-tasks')||'[]'); } catch(e){}
+  function save(){ try{ localStorage.setItem('knu-tasks',JSON.stringify(tasks)); }catch(e){} }
+
+  const dateLabelEl = document.getElementById('date-label');
+  const taskDateInput = document.getElementById('task-date');
+  taskDateInput.addEventListener('change', () => {
+    if(dateLabelEl) dateLabelEl.style.display = taskDateInput.value ? 'none' : 'block';
+  });
 
   function addTask(){
-    const text=document.getElementById('task-input').value.trim();
-    const date=document.getElementById('task-date').value;
-    const tag=document.getElementById('task-tag').value;
+    const text = document.getElementById('task-input').value.trim();
+    const date = taskDateInput.value;
+    const tag = document.getElementById('task-tag').value;
     if(!text) return;
-    tasks.unshift({id:Date.now(),text,date,tag,done:false});
-    document.getElementById('task-input').value='';
-    document.getElementById('task-date').value='';
+    tasks.unshift({id:Date.now(), text, date, tag, done:false});
+    document.getElementById('task-input').value = '';
+    taskDateInput.value = '';
+    if(dateLabelEl) dateLabelEl.style.display = 'block';
     save(); renderAll();
   }
-  document.getElementById('task-input').addEventListener('keydown',e=>{ if(e.key==='Enter') addTask(); });
+  document.getElementById('task-input').addEventListener('keydown', e=>{ if(e.key==='Enter') addTask(); });
 
   function toggleTask(id){ const t=tasks.find(t=>t.id===id); if(t){t.done=!t.done;save();renderAll();} }
   function deleteTask(id){ tasks=tasks.filter(t=>t.id!==id); save(); renderAll(); }
 
-  const TAG_LABEL={assignment:'과제',exam:'시험',class:'수업',personal:'개인'};
-  function renderAll(){ renderTasks(); renderDone(); renderStats(); renderDday(); }
-
-  // 탭 전환
-  let currentTab = 'tasks';
-  function switchTab(tab){
-    currentTab = tab;
-    document.getElementById('tab-tasks').classList.toggle('active', tab==='tasks');
-    document.getElementById('tab-done').classList.toggle('active', tab==='done');
-    document.getElementById('panel-tasks').style.display = tab==='tasks' ? 'block' : 'none';
-    document.getElementById('panel-done').style.display = tab==='done' ? 'block' : 'none';
-  }
-
-  function renderTasks(){
-    const list=document.getElementById('task-list');
-    const active = tasks.filter(t => !t.done);
-    if(!active.length){ list.innerHTML='<div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>'; return; }
-    const sorted=[...active].sort((a,b)=>{
-      if(!a.date) return 1; if(!b.date) return -1;
-      return new Date(a.date)-new Date(b.date);
-    });
-    list.innerHTML=sorted.map(t=>{
-      const dl=daysLeft(t.date);
-      let ddayHtml='';
-      if(dl!==null){
-        const cls=dl<0?'':dl===0?'gold':dl<=2?'red':'';
-        const label=dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
-        ddayHtml=`<span class="task-dday ${cls}">${label}</span>`;
-      }
-      return `<div class="task-item">
-        <div class="task-check" onclick="toggleTask(${t.id})"></div>
-        <div class="task-text" ondblclick="editTask(${t.id}, this)" title="더블클릭으로 수정">${t.text}</div>
-        <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
-        ${ddayHtml}
-        <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
-      </div>`;
-    }).join('');
-  }
-
   // 더블클릭 수정
   function editTask(id, el){
-    const t = tasks.find(t => t.id === id);
+    const t = tasks.find(t=>t.id===id);
     if(!t) return;
     const original = t.text;
     el.contentEditable = 'true';
@@ -691,69 +811,98 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
     el.style.borderRadius = '2px';
     el.style.padding = '1px 4px';
     el.focus();
-    // 커서를 텍스트 끝으로
     const range = document.createRange();
     range.selectNodeContents(el);
     range.collapse(false);
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
-
     function finish(){
-      el.contentEditable = 'false';
-      el.style.outline = '';
-      el.style.borderRadius = '';
-      el.style.padding = '';
+      el.contentEditable='false';
+      el.style.outline='';
+      el.style.borderRadius='';
+      el.style.padding='';
       const newText = el.textContent.trim();
-      if(newText && newText !== original){
-        t.text = newText;
-        save(); renderAll();
-      } else {
-        el.textContent = original;
-      }
+      if(newText && newText !== original){ t.text=newText; save(); renderAll(); }
+      else { el.textContent=original; }
     }
-    el.addEventListener('blur', finish, { once: true });
-    el.addEventListener('keydown', e => {
-      if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
-      if(e.key === 'Escape'){ el.textContent = original; el.blur(); }
-    }, { once: true });
+    el.addEventListener('blur', finish, {once:true});
+    el.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){e.preventDefault();el.blur();}
+      if(e.key==='Escape'){el.textContent=original;el.blur();}
+    }, {once:true});
   }
 
-  function renderDone(){
-    const list=document.getElementById('done-list');
-    const done = tasks.filter(t => t.done);
-    if(!done.length){ list.innerHTML='<div class="empty-state">완료된 항목이 없어요</div>'; return; }
-    list.innerHTML=done.map(t=>{
+  const TAG_LABEL = {assignment:'과제', exam:'시험', class:'수업', personal:'개인'};
+  function renderAll(){ renderTasks(); renderDone(); renderStats(); renderDday(); }
+
+  // 탭 전환
+  function switchTab(tab){
+    document.getElementById('tab-tasks').classList.toggle('active', tab==='tasks');
+    document.getElementById('tab-done').classList.toggle('active', tab==='done');
+    document.getElementById('panel-tasks').style.display = tab==='tasks' ? 'block' : 'none';
+    document.getElementById('panel-done').style.display = tab==='done' ? 'block' : 'none';
+  }
+
+  function renderTasks(){
+    const list = document.getElementById('task-list');
+    const active = tasks.filter(t=>!t.done);
+    if(!active.length){ list.innerHTML='<div class="empty-state">NO TASKS · 위에서 항목을 추가해보세요</div>'; return; }
+    const sorted = [...active].sort((a,b)=>{
+      if(!a.date) return 1; if(!b.date) return -1;
+      return new Date(a.date)-new Date(b.date);
+    });
+    list.innerHTML = sorted.map(t=>{
+      const dl = daysLeft(t.date);
+      let ddayHtml = '';
+      if(dl !== null){
+        const cls = dl<0?'':dl===0?'gold':dl<=2?'red':'';
+        const label = dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
+        ddayHtml = `<span class="task-dday ${cls}">${label}</span>`;
+      }
       return `<div class="task-item">
-        <div class="task-check checked" onclick="toggleTask(${t.id})"></div>
-        <div class="task-text done">${t.text}</div>
+        <div class="task-check" onclick="toggleTask(${t.id})"></div>
+        <div class="task-text" ondblclick="editTask(${t.id},this)" title="더블클릭으로 수정">${t.text}</div>
         <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
+        ${ddayHtml}
         <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
       </div>`;
     }).join('');
   }
 
+  function renderDone(){
+    const list = document.getElementById('done-list');
+    const done = tasks.filter(t=>t.done);
+    if(!done.length){ list.innerHTML='<div class="empty-state">완료된 항목이 없어요</div>'; return; }
+    list.innerHTML = done.map(t=>`
+      <div class="task-item">
+        <div class="task-check checked" onclick="toggleTask(${t.id})"></div>
+        <div class="task-text done">${t.text}</div>
+        <span class="tag tag-${t.tag}">${TAG_LABEL[t.tag]}</span>
+        <button class="btn-del" onclick="deleteTask(${t.id})">✕</button>
+      </div>`).join('');
+  }
+
   function renderStats(){
-    const total=tasks.length;
-    const done=tasks.filter(t=>t.done).length;
-    const urgent=tasks.filter(t=>{ const dl=daysLeft(t.date); return !t.done&&dl!==null&&dl>=0&&dl<=3; }).length;
-    const next=tasks.filter(t=>!t.done&&t.date).map(t=>daysLeft(t.date)).filter(d=>d!==null&&d>=0).sort((a,b)=>a-b)[0];
-    document.getElementById('stat-total').textContent=total;
-    document.getElementById('stat-done').textContent=done;
-    document.getElementById('stat-urgent').textContent=urgent;
-    document.getElementById('stat-next').textContent=next!==undefined?`D-${next}`:'—';
+    const remaining = tasks.filter(t=>!t.done).length;
+    const urgent = tasks.filter(t=>{ const dl=daysLeft(t.date); return !t.done&&dl!==null&&dl>=0&&dl<=3; }).length;
+    const next = tasks.filter(t=>!t.done&&t.date).map(t=>daysLeft(t.date)).filter(d=>d!==null&&d>=0).sort((a,b)=>a-b)[0];
+    const nextExam = tasks.filter(t=>!t.done&&t.date&&t.tag==='exam').map(t=>daysLeft(t.date)).filter(d=>d!==null&&d>=0).sort((a,b)=>a-b)[0];
+    document.getElementById('stat-total').textContent = remaining;
+    document.getElementById('stat-next').textContent = next!==undefined ? `D-${next}` : '—';
+    document.getElementById('stat-urgent').textContent = urgent;
+    document.getElementById('stat-exam').textContent = nextExam!==undefined ? `D-${nextExam}` : '—';
   }
 
   function renderDday(){
-    const strip=document.getElementById('dday-strip');
-    const items=tasks.filter(t=>t.date && !t.done).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
+    const strip = document.getElementById('dday-strip');
+    const items = tasks.filter(t=>t.date&&!t.done).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
     if(!items.length){ strip.innerHTML='<div class="dday-empty">마감일이 있는 항목을 추가하면 여기에 표시돼요</div>'; return; }
-    strip.innerHTML=items.map(t=>{
-      const dl=daysLeft(t.date);
-      const wrapCls=dl!==null&&dl>=0&&dl<=2?'urgent':dl===0?'gold-item':'';
-      // ✅ 버그 수정: D-DAY(0) 체크를 먼저
-      const numCls=dl<0?'muted':dl===0?'gold':dl!==null&&dl<=2?'red':'';
-      const label=dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
+    strip.innerHTML = items.map(t=>{
+      const dl = daysLeft(t.date);
+      const wrapCls = dl!==null&&dl>=0&&dl<=2?'urgent':dl===0?'gold-item':'';
+      const numCls = dl<0?'muted':dl===0?'gold':dl!==null&&dl<=2?'red':'';
+      const label = dl<0?'ENDED':dl===0?'D-DAY':`D-${dl}`;
       return `<div class="dday-item ${wrapCls}">
         <div class="dday-name">${t.text}</div>
         <div class="dday-num ${numCls}">${label}</div>
@@ -764,107 +913,74 @@ input, select, button { font-size:16px !important; } /* 안드로이드 자동 �
 
   renderAll();
 
-  // 메모
-  const memoEl=document.getElementById('memo');
-  try { memoEl.value=localStorage.getItem('knu-memo')||''; } catch(e){}
+  // ══════════════════════════════════════
+  // 메모 팝업
+  // ══════════════════════════════════════
+  const memoEl = document.getElementById('memo');
+  try { memoEl.value = localStorage.getItem('knu-memo')||''; } catch(e){}
+
+  function toggleMemo(){
+    document.getElementById('memo-overlay').classList.toggle('open');
+  }
+  function closeMemo(e){
+    if(!e || e.target === document.getElementById('memo-overlay')){
+      document.getElementById('memo-overlay').classList.remove('open');
+    }
+  }
   function saveMemo(){
-    try { localStorage.setItem('knu-memo',memoEl.value); } catch(e){}
-    const el=document.getElementById('memo-saved');
-    el.textContent='✓ SAVED'; setTimeout(()=>el.textContent='',2000);
+    try{ localStorage.setItem('knu-memo', memoEl.value); }catch(e){}
+    const el = document.getElementById('memo-saved');
+    el.textContent = '✓ SAVED';
+    setTimeout(()=>el.textContent='', 2000);
   }
   memoEl.addEventListener('input',()=>{ clearTimeout(memoEl._t); memoEl._t=setTimeout(saveMemo,1500); });
 
   // ══════════════════════════════════════
-  // 🔔 브라우저 알림
+  // 브라우저 알림
   // ══════════════════════════════════════
-
-  // 알림 버튼 상태 업데이트
   function updateNotifyBtn(){
     const granted = Notification.permission === 'granted';
-    const btn = document.getElementById('notify-btn');
-    const dot = document.getElementById('notify-dot');
-    const label = document.getElementById('notify-label');
-    if(granted){
-      btn.classList.add('active');
-      dot.classList.remove('off');
-      label.textContent = '알림 ON';
-    } else {
-      btn.classList.remove('active');
-      dot.classList.add('off');
-      label.textContent = '알림 OFF';
-    }
+    document.getElementById('notify-btn').classList.toggle('active', granted);
+    document.getElementById('notify-dot').classList.toggle('off', !granted);
+    document.getElementById('notify-label').textContent = granted ? '알림 ON' : '알림 OFF';
   }
-
-  // 알림 토글
   async function toggleNotify(){
     if(Notification.permission === 'granted'){
-      // 이미 허용 → 테스트 알림 전송
       sendTestNotification();
     } else if(Notification.permission === 'denied'){
-      alert('알림이 차단되어 있어요.\n브라우저 주소창 왼쪽 🔒 아이콘을 눌러\n알림을 허용해주세요!');
+      alert('알림이 차단되어 있어요.\n브라우저 주소창 왼쪽 아이콘을 눌러 알림을 허용해주세요!');
     } else {
-      // 권한 요청
       const result = await Notification.requestPermission();
       updateNotifyBtn();
-      if(result === 'granted'){
-        sendTestNotification();
-        scheduleNotifications();
-      }
+      if(result === 'granted'){ sendTestNotification(); scheduleNotifications(); }
     }
   }
-
-  // 테스트 알림
   function sendTestNotification(){
-    const urgent = tasks.filter(t => {
-      const dl = daysLeft(t.date);
-      return !t.done && dl !== null && dl >= 0 && dl <= 1;
-    });
-
-    if(urgent.length > 0){
+    const urgent = tasks.filter(t=>{ const dl=daysLeft(t.date); return !t.done&&dl!==null&&dl>=0&&dl<=1; });
+    if(urgent.length>0){
       new Notification('🔥 DLTNDKSC 대시보드', {
-        body: urgent.map(t => {
-          const dl = daysLeft(t.date);
-          return `${t.text} (${dl === 0 ? 'D-DAY' : 'D-' + dl})`;
-        }).join('\n'),
-        icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
+        body: urgent.map(t=>{ const dl=daysLeft(t.date); return `${t.text} (${dl===0?'D-DAY':'D-'+dl})`; }).join('\n')
       });
     } else {
-      new Notification('✅ DLTNDKSC 대시보드', {
-        body: '오늘/내일 마감 과제가 없어요! 알림이 설정됐어요 🎉',
-        icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
-      });
+      new Notification('✅ DLTNDKSC 대시보드', { body: '오늘/내일 마감 과제가 없어요! 알림이 설정됐어요 🎉' });
     }
   }
-
-  // 알림 스케줄러 — 매 분마다 오전 9시인지 체크
   function scheduleNotifications(){
-    setInterval(() => {
-      if(Notification.permission !== 'granted') return;
+    setInterval(()=>{
+      if(Notification.permission!=='granted') return;
       const now = new Date();
-      // 오전 9시 0분 0~59초에 실행
-      if(now.getHours() === 9 && now.getMinutes() === 0){
-        const todayItems = tasks.filter(t => {
-          const dl = daysLeft(t.date);
-          return !t.done && dl !== null && dl >= 0 && dl <= 1;
-        });
-        if(todayItems.length > 0){
+      if(now.getHours()===9 && now.getMinutes()===0){
+        const items = tasks.filter(t=>{ const dl=daysLeft(t.date); return !t.done&&dl!==null&&dl>=0&&dl<=1; });
+        if(items.length>0){
           new Notification('📅 오늘의 마감 알림 — DLTNDKSC', {
-            body: todayItems.map(t => {
-              const dl = daysLeft(t.date);
-              return `• ${t.text} (${dl === 0 ? 'D-DAY' : 'D-' + dl})`;
-            }).join('\n'),
-            icon: 'https://dltndkscdashboard.netlify.app/favicon.ico'
+            body: items.map(t=>{ const dl=daysLeft(t.date); return `• ${t.text} (${dl===0?'D-DAY':'D-'+dl})`; }).join('\n')
           });
         }
       }
-    }, 60000); // 1분마다 체크
+    }, 60000);
   }
-
-  // 초기화
   updateNotifyBtn();
-  if(Notification.permission === 'granted'){
-    scheduleNotifications();
-  }
+  if(Notification.permission==='granted') scheduleNotifications();
 </script>
 
 </body></html>

@@ -1,6 +1,6 @@
 <html lang="ko"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DLTNDKS 대시보드</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -289,6 +289,16 @@
   @media(max-width:768px){
     .row3{ grid-template-columns:1fr; }
     .stats-row{ grid-template-columns:repeat(2,1fr); }
+/* 안드로이드 터치 최적화 */
+.task-check { width:20px; height:20px; }
+.btn-del { padding:6px 8px; font-size:14px; }
+.tt-add-btn { padding:8px 0; font-size:12px; }
+.btn-add { font-size:13px; }
+.task-tab { padding:12px 0; font-size:13px; }
+.dday-item { min-width:110px; padding:12px; }
+.qlink { padding:14px 16px; }
+* { -webkit-tap-highlight-color: transparent; }
+input, select, button { font-size:16px !important; } /* 안드로이드 자동 줌 방지 */
 
     /* 헤더 모바일 최적화 */
     header {
